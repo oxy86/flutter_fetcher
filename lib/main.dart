@@ -151,6 +151,8 @@ class Post {
   final String title;
   String? body;
 
+  String label = 'Result';
+
   Post(this.userId, this.id, this.title, this.body);
 
   @override
@@ -164,6 +166,7 @@ class Post {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+      Text(label),
       Text('Post $id', style: style),
       Text('user: $userId',style: style),
       Text('Title: $title',style: style),

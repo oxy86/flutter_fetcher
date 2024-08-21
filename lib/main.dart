@@ -8,26 +8,25 @@ late String nothingLabel;
 
 void main() {
   nothingLabel = 'no \u2665 ♥ yet 😆 \u{1f606}';
-  
+
   final pipa = Random().nextDouble();
-  print (pipa);
-  print (pipa.hashCode); 
-  print (pipa is int); 
+  print(pipa);
+  print(pipa.hashCode);
+  print(pipa is int);
 
-  int pipa2 = ( pipa*100) ~/ 1;
+  int pipa2 = (pipa * 100) ~/ 1;
 
-  print (pipa2); 
-  print (pipa2.hashCode); 
-  print (pipa2 is int); 
+  print(pipa2);
+  print(pipa2.hashCode);
+  print(pipa2 is int);
 
   double? pipa3 = pipa2.toDouble();
 
-  print (pipa3); 
-  print (pipa3.hashCode); 
-  print (pipa3 is int); 
+  print(pipa3);
+  print(pipa3.hashCode);
+  print(pipa3 is int);
 
-
-  print (pipa2/2 ==pipa3/2); 
+  print(pipa2 / 2 == pipa3 / 2);
 
   // List<num> list;
   var list = <num>{};
@@ -41,14 +40,26 @@ void main() {
     print(element);
   }
 
-
-  
   Set<String> names = {}; // This works, too.
   print(names.runtimeType);
 
-  var names2 = {1: '2'}; // This works, too. 
-  names2[1]='dddd';
+  var names2 = {1: '2'}; // This works, too.
+  names2[1] = 'dddd';
   print(names2);
+
+// Record type annotation in a variable declaration:
+  (String, int) record;
+
+// Initialize it with a record expression:
+  record = ('A string', 123);
+  record = ('A string', 1233);
+  print(record);
+
+  var record2 = (a: 3.14, b: 2.71);
+
+  print(record2.runtimeType);
+
+
 
   runApp(const MyApp());
 }
@@ -59,7 +70,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     var title = 'Flutter fetcher';
 
     return MaterialApp(
@@ -90,36 +100,32 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int counter = 0;
 
-  var post = Post(0,0,'','');
+  var post = Post(0, 0, '', '');
 
   Future<Post> doFetchData() async {
     var random = Random();
-    final httpPackageUrl = Uri.https('jsonplaceholder.typicode.com', '/posts/${random.nextInt(100)}' );
+    final httpPackageUrl = Uri.https(
+        'jsonplaceholder.typicode.com', '/posts/${random.nextInt(100)}');
     final httpPackageResponse = await http.get(httpPackageUrl);
     if (httpPackageResponse.statusCode != 200) {
       print('Failed to retrieve!');
-      return Post(0,0,'','');
+      return Post(0, 0, '', '');
     }
     final json = jsonDecode(httpPackageResponse.body);
-    
+
     setState(() {
-      counter++; 
+      counter++;
       post = Post(json['userId'], json['id'], json['title'], json['body']);
     });
     return post;
   }
 
-
-
   void _fetchData() {
     doFetchData();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     // This method is rerun every time setState is called, for instance as done
     // by the _fetchData method above.
 
@@ -178,7 +184,6 @@ class ResultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     if (post.title.isEmpty) {
       return Text(
         nothingLabel,
@@ -187,10 +192,8 @@ class ResultWidget extends StatelessWidget {
     } else {
       return post.toColumn(Theme.of(context).textTheme.headlineMedium);
     }
-
   }
 }
-
 
 class Post {
   final int userId, id;
@@ -204,24 +207,23 @@ class Post {
   @override
   String toString() {
     return 'Post $id by user: $userId \n'
-    'Title: $title \n'
-    'Body: $body';
+        'Title: $title \n'
+        'Body: $body';
   }
 
   Column toColumn(style) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-      Text(label),
-      Text('Post $id', style: style),
-      Text('user: $userId',style: style),
-      Text('Title: $title',style: style),
-      Text('Body: $body',style: style),
-    ],
+        Text(label),
+        Text('Post $id', style: style),
+        Text('user: $userId', style: style),
+        Text('Title: $title', style: style),
+        Text('Body: $body', style: style),
+      ],
     );
   }
 }
-
 
 class Package {
   final String name, latestVersion;
@@ -234,4 +236,3 @@ class Package {
     return 'Package{name: $name, latestVersion: $latestVersion, description: $description}';
   }
 }
-

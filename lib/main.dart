@@ -4,7 +4,52 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 
+late String nothingLabel;
+
 void main() {
+  nothingLabel = 'no \u2665 ♥ yet 😆 \u{1f606}';
+  
+  final pipa = Random().nextDouble();
+  print (pipa);
+  print (pipa.hashCode); 
+  print (pipa is int); 
+
+  int pipa2 = ( pipa*100) ~/ 1;
+
+  print (pipa2); 
+  print (pipa2.hashCode); 
+  print (pipa2 is int); 
+
+  double? pipa3 = pipa2.toDouble();
+
+  print (pipa3); 
+  print (pipa3.hashCode); 
+  print (pipa3 is int); 
+
+
+  print (pipa2/2 ==pipa3/2); 
+
+  // List<num> list;
+  var list = <num>{};
+  list = {pipa, pipa2};
+
+  print(list.runtimeType);
+
+  Set<String> list2 = {'mitsos', 'mitsi'};
+
+  for (var element in list2) {
+    print(element);
+  }
+
+
+  
+  Set<String> names = {}; // This works, too.
+  print(names.runtimeType);
+
+  var names2 = {1: '2'}; // This works, too. 
+  names2[1]='dddd';
+  print(names2);
+
   runApp(const MyApp());
 }
 
@@ -14,14 +59,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    var title = 'Flutter fetcher';
+
     return MaterialApp(
-      title: 'Flutter Fetcher',
+      title: title,
       theme: ThemeData(
         // This is the theme of your application.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Home'),
+      home: const MyHomePage(title: 'MyHome'),
     );
   }
 }
@@ -40,12 +88,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int counter = 0;
 
-  Post post = Post(0,0,'','');
+  var post = Post(0,0,'','');
 
   Future<Post> doFetchData() async {
-    Random random = new Random();
+    var random = Random();
     final httpPackageUrl = Uri.https('jsonplaceholder.typicode.com', '/posts/${random.nextInt(100)}' );
     final httpPackageResponse = await http.get(httpPackageUrl);
     if (httpPackageResponse.statusCode != 200) {
@@ -53,12 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return Post(0,0,'','');
     }
     final json = jsonDecode(httpPackageResponse.body);
-    final _post =
-        Post(json['userId'], json['id'], json['title'], json['body']);
     
     setState(() {
-      _counter++; 
-      post = _post;
+      counter++; 
+      post = Post(json['userId'], json['id'], json['title'], json['body']);
     });
     return post;
   }
@@ -107,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Count $_counter',
+              'Count $counter',
             ),
             ResultWidget(post: post),
           ],
@@ -135,7 +181,7 @@ class ResultWidget extends StatelessWidget {
 
     if (post.title.isEmpty) {
       return Text(
-        'nothing yet!',
+        nothingLabel,
         style: Theme.of(context).textTheme.headlineMedium,
       );
     } else {
